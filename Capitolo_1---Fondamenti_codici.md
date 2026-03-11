@@ -105,7 +105,6 @@ La ridondanza non è sempre un difetto: spesso viene introdotta apposta perché 
 - **Bit**: un simbolo dell’alfabeto $\{0,1\}$.
 - **Byte**: gruppo di 8 bit.
 - **Carattere**: unità di testo (lettera, cifra, segno…).
-- **Code point**: numero che identifica un carattere nel repertorio Unicode.
 
 
 ## 1.9 Esercizi
