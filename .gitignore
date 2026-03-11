@@ -1,0 +1,6 @@
+# Ignore all PDF files
+*.pdf
+
+# Temporarily ignore these markdown files
+Capitolo_2---Testo_e_caratteri.md
+Appendice_A---Tipo_bytes.md
