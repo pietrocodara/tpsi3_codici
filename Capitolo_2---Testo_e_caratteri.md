@@ -199,3 +199,95 @@ print(data.decode("utf-8"))
 - `b.hex()` per vedere i byte in esadecimale
 - `list(b)` per vedere i byte come numeri 0–255
 
+## 2.8 Codifiche testuali avanzate
+
+Abbiamo visto come ASCII e UTF-8 trasformino caratteri in byte (e viceversa). Ma spesso dobbiamo inviare questi byte su canali che accettano **solo testo puro**, come email, URL web o configurazioni JSON. Qui entrano in gioco le **codifiche testuali avanzate**: prendono sequenze di byte e le rappresentano come stringhe ASCII "sicure", pronte per la trasmissione.
+
+Queste codifiche **non sono cifrature** (non nascondono i dati), ma semplice "rappresentazioni alternative". Sono essenziali per protocolli reali: embed di immagini in HTML, dati binari in API REST, o parametri speciali nei link.
+
+### 2.8.1 Base64: da binario a testo ASCII sicuro
+
+**Base64** è la più comune. Prende gruppi di **3 byte** (24 bit), li divide in **4 gruppi da 6 bit**, e mappa ogni gruppo su uno di **64 caratteri ASCII sicuri**: A-Z, a-z, 0-9, +, /. 
+
+- Se i byte non sono multipli di 3, aggiunge **padding** con `=` alla fine.
+- Ogni 3 byte diventano 4 caratteri: **aumento del 33%** in volume.
+- Usa solo caratteri stampabili, perfetti per email (MIME), HTML o JSON.
+
+**Esempio pratico con Python** (riprendendo `b"Ciao!"` dal paragrafo 2.5):
+
+```python
+import base64
+
+dati = b"Ciao!"      # 5 byte (da UTF-8)
+codifica = base64.b64encode(dati)
+print(codifica)      # b'Q2lhbw=='
+testo_base64 = codifica.decode('ascii')
+print(testo_base64)  # Q2lhbw==
+decod = base64.b64decode(testo_base64)
+print(decod)         # b'Ciao!'
+print(decod.decode('utf-8'))  # Ciao!
+```
+
+**Prova tu**: Codifica i byte di `€` (UTF-8: `b'\xe2\x82\xac'`). Risultato? `4q2D` (no padding).
+
+**Variante**: `base64.urlsafe_b64encode()` sostituisce `+` con `-` e `/` con `_` per URL sicuri.
+
+### 2.8.2 URL Encoding (Percent-Encoding): caratteri speciali nei link
+
+Gli URL non tollerano spazi, &, ?, ò o caratteri non-ASCII: li **rompono**. **URL encoding** (o percent-encoding) li trasforma in **%HH**, dove HH sono due cifre esadecimali (00-FF).
+
+- Spazio → `%20`
+- `?` → `%3F`
+- ò → `%C3%B2` (i suoi 2 byte UTF-8)
+- È **standard RFC 3986**, usata in query string (`?nome=citt%C3%A0`), path o form HTML.
+
+**Esempio pratico con Python**:
+
+```python
+import urllib.parse
+
+testo = "città? & ò"
+cod = urllib.parse.quote(testo)           # Encode
+print(cod)     # citt%C3%A0%3F%20%26%20%C3%B2
+dec = urllib.parse.unquote(cod)           # Decode
+print(dec)     # città? & ò
+
+# Per soli parametri query (non path)
+print(urllib.parse.quote_plus("a b"))     # a+b (spazio → +)
+```
+
+**URL completo**:
+```
+https://esempio.com/cerca?query=citt%C3%A0&filtro=alta%20qualit%C3%A0
+```
+Senza encoding, il browser interpreta `&filtro` come parametro separato!
+
+### 2.8.3 Altre codifiche utili per testo
+
+- **Quoted-Printable** (per email MIME): Caratteri non-stampa → `=HH` (es. `à` → `=C3=A0`). Simile a URL, ma con `=` invece di `%`.
+  
+```python
+import quopri
+b = b"ciao\xc3\xa0"  # ò in UTF-8? No, à
+qp = quopri.encodestring(b)
+print(qp.decode())  # Y2lhbz0K (righe con = terminano)
+```
+
+- **Hex (già visto)**: `b.hex()` dà byte come stringa esadecimale (es. `b"A"` → `"41"`). Utile per debug.
+
+### 2.8.4 Confronto rapido
+
+| Codifica | Quando usarla | Esempio: "à" (UTF-8: C3 A0) | Aumento dimensione |
+|----------|---------------|------------------------------|-------------------|
+| Base64  | Binario in email/JSON | `w6E=` | +33% | 
+| URL     | Parametri web | `%C3%A0` | +200% (per char) |
+| Hex     | Debug | `c3a0` | +100% |
+| Quoted-Printable | Email testuale | `=C3=A0` | Minimo |
+
+**Nota**: Per dati sensibili, usa **crittografia** (capitoli futuri), non queste!
+
+## 2.9 Esercizi aggiuntivi
+
+1. Codifica `"Hello ò€"` in Base64 e URL. Confronta le stringhe resultanti.
+2. Crea un URL con `query="spazio & accenti"`. Quali %HH vedi?
+3. Prendi byte casuali (`os.urandom(10)`), codifica in Base64, decodifica: tornano uguali?
