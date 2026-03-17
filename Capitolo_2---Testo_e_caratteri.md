@@ -1,7 +1,8 @@
 # Capitolo 2 — Testo e caratteri: ASCII e UTF‑8
 
-Pagine 130-136
-Base 64 e URL encoding non sono sul libro
+*Sul libro pagine 130-136.*
+
+*Base 64 e URL encoding non sono sul libro.*
 
 ## 2.1 Testo e byte non sono la stessa cosa
 

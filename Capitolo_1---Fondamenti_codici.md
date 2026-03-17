@@ -1,6 +1,6 @@
 # Capitolo 1 — Fondamenti: come si rappresenta l’informazione
 
-Sul libro pagine 128-130.
+*Sul libro pagine 128-130.*
 
 ## 1.1 Un’idea semplice: la stessa informazione si può rappresentare in modi diversi
 
