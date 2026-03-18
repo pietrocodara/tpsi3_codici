@@ -1,4 +1,7 @@
 # Ignore all PDF files
 *.pdf
 
+# Ignore all python source files
+*.py
+
 # Temporarily ignore these markdown files

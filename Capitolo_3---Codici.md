@@ -1,5 +1,7 @@
 # Capitolo 3: Codici numerici in digitale
 
+*Sul libro pagine 137-151.*
+
 Quando un computer deve rappresentare numeri, non esiste un unico modo "giusto" di farlo.
 A seconda dell'applicazione — un display, un encoder rotativo, un sistema di barcode industriale
 — conviene usare codifiche diverse, ciascuna progettata per minimizzare errori, semplificare
@@ -11,7 +13,7 @@ tradurre una cifra decimale (0–9) o un numero binario in una sequenza di bit.
 ## 3.1 Perché esistono tanti codici?
 
 Il binario puro è ottimo per la matematica interna al processore, ma in molte situazioni crea
-problemi pratici. Immagina un encoder rotativo meccanico: se due bit cambiano simultaneamente
+problemi pratici. Immagina un encoder rotativo meccanico: se più bit cambiano simultaneamente
 durante una transizione (cosa che accade in binario puro passando da 3 = `011` a 4 = `100`),
 un'imprecisione temporale può far leggere per un istante un valore completamente sbagliato.
 Il codice Gray risolve proprio questo: garantisce che tra due valori consecutivi cambi
@@ -23,7 +25,7 @@ binario `111011`), perché ogni singolo nibble pilota direttamente un display in
 
 ---
 
-## 3.2 Codice BCD 8421
+## 3.2 Codice BCD (8421)
 
 Il BCD (Binary Coded Decimal) è il codice decimale più diffuso. Ogni cifra decimale viene
 codificata con 4 bit usando i pesi **8-4-2-1**, ovvero le normali potenze del 2. Solo le
@@ -72,7 +74,7 @@ riempito con una zona fissa tipo `0011` per ASCII).
 
 Il formato **packed** è preferito nei sistemi embedded e nei PLC dove la memoria è limitata.
 Il formato **unpacked** semplifica la manipolazione software cifra per cifra ed è più comune
-nei sistemi che lavorano con stringhe numeriche (es. COBOL, EBCDIC).
+nei sistemi che lavorano con stringhe numeriche (es. EBCDIC).
 
 ---
 
@@ -80,7 +82,7 @@ nei sistemi che lavorano con stringhe numeriche (es. COBOL, EBCDIC).
 
 Il codice Aiken usa i pesi **2-4-2-1** invece di 8-4-2-1. La scelta di questi pesi non è
 casuale: permette di costruire un codice **autocomplementante**, cioè il complemento a 9 di
-una cifra si ottiene semplicemente **invertendo tutti i bit**. Questo semplifica molto i
+una cifra si ottiene semplicemente **invertendo tutti i bit**. Questo semplifica i
 circuiti per la sottrazione decimale, perché non serve una logica separata per calcolare
 il complemento.
 
@@ -97,13 +99,13 @@ La tabella seguente mostra la proprietà di autocomplementazione: ogni coppia
 (cifra, complemento a 9) è affiancata per evidenziare che i rispettivi codici sono NOT
 bit-a-bit l'uno dell'altro.
 
-| Cifra | Aiken  | ↔ | Cifra | Aiken  | NOT coincide? |
-|:-----:|:------:|:-:|:-----:|:------:|:-------------:|
-|   0   | `0000` | ↔ |   9   | `1111` | ✓             |
-|   1   | `0001` | ↔ |   8   | `1110` | ✓             |
-|   2   | `0010` | ↔ |   7   | `1101` | ✓             |
-|   3   | `0011` | ↔ |   6   | `1100` | ✓             |
-|   4   | `0100` | ↔ |   5   | `1011` | ✓             |
+| Cifra | Aiken  | ↔ | Cifra | Aiken  | 
+|:-----:|:------:|:-:|:-----:|:------:|
+|   0   | `0000` | ↔ |   9   | `1111` | 
+|   1   | `0001` | ↔ |   8   | `1110` | 
+|   2   | `0010` | ↔ |   7   | `1101` | 
+|   3   | `0011` | ↔ |   6   | `1100` | 
+|   4   | `0100` | ↔ |   5   | `1011` | 
 
 **Esempio di codifica:** il numero **36** in Aiken → 3 = `0011`, 6 = `1100` → `0011 1100`.
 
@@ -111,7 +113,7 @@ bit-a-bit l'uno dell'altro.
 
 ---
 
-## 3.4 Codice XS-3 (Eccesso 3)
+## 3.4 Codice Eccesso 3 (XS-3)
 
 L'Eccesso-3 si costruisce in modo semplicissimo: si prende il valore decimale, **si aggiunge 3**,
 e si codifica il risultato in binario a 4 bit. Quindi:
@@ -120,7 +122,7 @@ e si codifica il risultato in binario a 4 bit. Quindi:
 - 5 → 5+3 = 8 → `1000`
 - 9 → 9+3 = 12 → `1100`
 
-Proprio perché è BCD spostato di 3, è anch'esso un codice **autocomplementante**:
+Anche Eccesso 3 è un codice **autocomplementante**:
 il complemento a 9 si ottiene invertendo tutti i bit.
 
 | Decimale |  0   |  1   |  2   |  3   |  4   |  5   |  6   |  7   |  8   |  9   |
@@ -129,13 +131,13 @@ il complemento a 9 si ottiene invertendo tutti i bit.
 
 La tabella seguente mostra le coppie simmetriche:
 
-| Cifra | XS-3   | ↔ | Cifra | XS-3   | NOT coincide? |
-|:-----:|:------:|:-:|:-----:|:------:|:-------------:|
-|   0   | `0011` | ↔ |   9   | `1100` | ✓             |
-|   1   | `0100` | ↔ |   8   | `1011` | ✓             |
-|   2   | `0101` | ↔ |   7   | `1010` | ✓             |
-|   3   | `0110` | ↔ |   6   | `1001` | ✓             |
-|   4   | `0111` | ↔ |   5   | `1000` | ✓             |
+| Cifra | XS-3   | ↔ | Cifra | XS-3   | 
+|:-----:|:------:|:-:|:-----:|:------:|
+|   0   | `0011` | ↔ |   9   | `1100` | 
+|   1   | `0100` | ↔ |   8   | `1011` | 
+|   2   | `0101` | ↔ |   7   | `1010` | 
+|   3   | `0110` | ↔ |   6   | `1001` | 
+|   4   | `0111` | ↔ |   5   | `1000` |
 
 **Esempio di codifica:** **47** in XS-3 → 4+3=7 → `0111`, 7+3=10 → `1010` → `0111 1010`.
 
@@ -143,32 +145,28 @@ La tabella seguente mostra le coppie simmetriche:
 
 ---
 
-## 3.5 Codice 63210 (2-su-5 pesato)
+## 3.5 Codice 2-su-5 pesato (63210)
 
-Il codice 63210 usa 5 bit con pesi **6-3-2-1-0** e impone il vincolo che esattamente
-**2 bit siano a `1`** in ogni parola valida. Questa combinazione lo rende unico: è al tempo
-stesso **pesato** (il valore decimale si ottiene sommando i pesi delle due posizioni a `1`
-per le cifre 1–9) e **self-checking** (qualsiasi errore su un singolo bit porta il conteggio
-degli `1` a 1 o 3, immediatamente riconoscibile).
+Il codice 2 su 5 che vediamo usa 5 bit con pesi **6-3-2-1-0** e impone il vincolo che esattamente
+**2 bit siano a `1`** in ogni parola valida. Questo codice è pesato e permette un semplice controllo d'errore, perché qualsiasi errore su un singolo bit porta il conteggio degli `1` a 1 o 3.
 
-Con i pesi 6-3-2-1-0 non esiste alcuna coppia di bit la cui somma dia 0, quindi lo zero è
-l'unico caso convenzionale: viene codificato con la combinazione `00110` (2+1=3), l'unica
-rimasta disponibile dopo aver assegnato tutte le altre cifre. Per le cifre **1–9 invece la
+Con i pesi 6-3-2-1-0 non esiste alcuna coppia di bit la cui somma dia 0, quindi lo zero
+non può rispettare il vincolo dato dai pesi: viene convenzionalmente codificato con la combinazione `00110` (2+1=3), l'unica rimasta disponibile dopo aver assegnato tutte le altre cifre. Per le cifre **1–9 invece la
 somma dei pesi corrisponde esattamente al valore decimale**, rendendo la decodifica hardware
 molto semplice.
 
-| Decimale | Codice  | Pesi attivi (6·b₄ + 3·b₃ + 2·b₂ + 1·b₁ + 0·b₀) | Somma |
-|:--------:|:-------:|:------------------------------------------------:|:-----:|
-|    0     | `00110` | 2 + 1                                            | 3 (conv.) |
-|    1     | `00011` | 1 + 0                                            | 1 ✓  |
-|    2     | `00101` | 2 + 0                                            | 2 ✓  |
-|    3     | `01001` | 3 + 0                                            | 3 ✓  |
-|    4     | `01010` | 3 + 1                                            | 4 ✓  |
-|    5     | `01100` | 3 + 2                                            | 5 ✓  |
-|    6     | `10001` | 6 + 0                                            | 6 ✓  |
-|    7     | `10010` | 6 + 1                                            | 7 ✓  |
-|    8     | `10100` | 6 + 2                                            | 8 ✓  |
-|    9     | `11000` | 6 + 3                                            | 9 ✓  |
+| Decimale | Codice  | Pesi attivi (6·b₄ + 3·b₃ + 2·b₂ + 1·b₁ + 0·b₀) |
+|:--------:|:-------:|:------------------------------------------------:|
+|    0     | `00110` | 2 + 1                                            |
+|    1     | `00011` | 1 + 0                                            |
+|    2     | `00101` | 2 + 0                                            |
+|    3     | `01001` | 3 + 0                                            |
+|    4     | `01010` | 3 + 1                                            |
+|    5     | `01100` | 3 + 2                                            |
+|    6     | `10001` | 6 + 0                                            |
+|    7     | `10010` | 6 + 1                                            |
+|    8     | `10100` | 6 + 2                                            |
+|    9     | `11000` | 6 + 3                                            |
 
 **Esempio di codifica:** il numero **47** → 4 = `01010`, 7 = `10010` → `01010 10010`.
 
@@ -178,7 +176,7 @@ molto semplice.
 
 ---
 
-## 3.6 Codice Gray: costruzione e conversioni
+## 3.6 Codice Gray
 
 Il codice Gray è il più elegante dal punto di vista logico. La sua proprietà fondamentale è
 che tra due valori **consecutivi** cambia sempre e solo **1 bit**. Questo elimina le ambiguità
@@ -198,24 +196,30 @@ Passo per passo fino a 4 bit:
 | Passo | Lista risultante |
 |:-----:|:-----------------|
 | 1 bit | `0`, `1` |
-| 2 bit | `00`, `01` \| riflesso `01`,`00` → con prefissi: **`00`, `01`, `11`, `10`** |
-| 3 bit | `000`,`001`,`011`,`010` \| riflesso → **`000`,`001`,`011`,`010`,`110`,`111`,`101`,`100`** |
+| 2 bit | `0`, `1` \| `1`,`0` → con prefissi: **`00`, `01`, `11`, `10`** |
+| 3 bit | `00`,`01`,`11`,`10` \| `10`,`11`,`01`,`00` → **`000`,`001`,`011`,`010`,`110`,`111`,`101`,`100`** |
 | 4 bit | Lista da 3 bit con prefisso `0`, poi riflessa con prefisso `1` (16 valori totali) |
 
 Il risultato a 4 bit, confrontato al binario puro:
 
-| Decimale | Binario | Gray   | Bit cambiati dalla riga precedente |
-|:--------:|:-------:|:------:|:----------------------------------:|
-|    0     | `0000`  | `0000` | —                                  |
-|    1     | `0001`  | `0001` | bit 0                              |
-|    2     | `0010`  | `0011` | bit 1                              |
-|    3     | `0011`  | `0010` | bit 0                              |
-|    4     | `0100`  | `0110` | bit 2                              |
-|    5     | `0101`  | `0111` | bit 0                              |
-|    6     | `0110`  | `0101` | bit 1                              |
-|    7     | `0111`  | `0100` | bit 0                              |
-|    8     | `1000`  | `1100` | bit 3                              |
-|    9     | `1001`  | `1101` | bit 0                              |
+| Decimale | Gray   | Binario |
+|:--------:|:------:|:-------:|
+|    0     | `0000` | `0000`  |
+|    1     | `0001` | `0001`  |
+|    2     | `0011` | `0010`  |
+|    3     | `0010` | `0011`  |
+|    4     | `0110` | `0100`  |
+|    5     | `0111` | `0101`  |
+|    6     | `0101` | `0110`  |
+|    7     | `0100` | `0111`  |
+|    8     | `1100` | `1000`  |
+|    9     | `1101` | `1001`  |
+|   10     | `1111` | `1010`  |
+|   11     | `1110` | `1011`  |
+|   12     | `1010` | `1100`  |
+|   13     | `1011` | `1101`  |
+|   14     | `1001` | `1110`  |
+|   15     | `1000` | `1111`  |
 
 Nel binario puro il passaggio 7→8 cambia **4 bit** contemporaneamente (`0111`→`1000`);
 in Gray cambia solo il bit 3 (`0100`→`1100`).
@@ -267,24 +271,23 @@ gray = n ^ (n >> 1)
 
 ---
 
-## 3.7 Codice XS-3 Riflesso (Eccesso 3 Gray)
+## 3.7 Codice Eccesso 3 Riflesso (XS-3)
 
-L'XS-3 riflesso è una variante dell'Eccesso-3 che combina due proprietà in una sola: è
-**autocomplementante** come l'XS-3 classico, ma in più garantisce che tra due cifre consecutive
-cambi **sempre e solo 1 bit**, esattamente come il codice Gray. Per questo motivo è detto
-anche *XS-3 Gray* o *Excess-3 Gray*.
+L'Eccesso 3 riflesso è una variante dell'Eccesso-3 che garantisce che tra due cifre consecutive
+cambi **sempre e solo 1 bit**, esattamente come nel codice Gray. Per questo motivo è detto
+anche *Eccesso 3 Gray*.
 
 ### Come si costruisce
 
 Avendo già a disposizione la tabella del codice Gray, la costruzione è immediata: si prendono
 i codici Gray corrispondenti ai valori 3–12, ovvero i 10 valori che si ottengono aggiungendo 3
-alle cifre 0–9, esattamente come nell'XS-3 classico. In altre parole:
+alle cifre 0–9. In altre parole:
 
-1. Prendi la tabella del codice Gray a 4 bit (già vista nella sezione precedente).
-2. Individua le righe corrispondenti ai valori **3, 4, 5, 6, 7, 8, 9, 10, 11, 12**.
-3. Assegnale rispettivamente alle cifre decimali **0, 1, 2, 3, 4, 5, 6, 7, 8, 9**.
+1. Prendiamo la tabella del codice Gray a 4 bit (già vista nella sezione precedente).
+2. Individuiamo le righe corrispondenti ai valori **3, 4, 5, 6, 7, 8, 9, 10, 11, 12**.
+3. Assegnamo le codifiche rispettivamente alle cifre decimali **0, 1, 2, 3, 4, 5, 6, 7, 8, 9**.
 
-Il codice Gray del valore (decimale + 3) diventa il codice XS-3 riflesso di quella cifra.
+Il codice Gray del valore (decimale + 3) diventa quindi il codice Eccesso 3 Riflesso di quella cifra.
 
 | Decimale | Decimale + 3 | Gray di (dec+3) | XS-3 Riflesso |
 |:--------:|:------------:|:---------------:|:-------------:|
@@ -299,28 +302,61 @@ Il codice Gray del valore (decimale + 3) diventa il codice XS-3 riflesso di quel
 |    8     |     11       |     `1110`      |    `1110`     |
 |    9     |     12       |     `1010`      |    `1010`     |
 
-### Proprietà di autocomplementazione
+### Altro modo di costruire Eccesso 3 Riflesso
 
-Come nell'XS-3 classico e in Aiken, il complemento a 9 di una cifra si ottiene invertendo
-tutti i bit. Le coppie simmetriche:
+Un altro modo per costruire il codice Eccesso 3 Riflesso è partire dal codice Eccesso 3.
+Ho tutti i dati. Il meccanismo è chiaro: si prende la parola XS-3 a 4 bit e si applica XOR con se stessa shiftata di 1 a destra (esattamente la formula binario→Gray). Ecco il sottoparagrafo riscritto correttamente, con la tabella di verifica completa:
 
-| Cifra | XS-3 Riflesso | ↔ | Cifra | XS-3 Riflesso | NOT coincide? |
-|:-----:|:-------------:|:-:|:-----:|:-------------:|:-------------:|
-|   0   |    `0010`     | ↔ |   9   |    `1101`     | ✓             |
-|   1   |    `0110`     | ↔ |   8   |    `1001`     | ✓             |
-|   2   |    `0111`     | ↔ |   7   |    `1000`     | ✓             |
-|   3   |    `0101`     | ↔ |   6   |    `1010`     | ✓             |
-|   4   |    `0100`     | ↔ |   5   |    `1011`     | ✓             |
+***
 
-> **Nota:** nel passaggio da 4 a 5 cambia **1 solo bit** (proprietà Gray), ma il codice
-> salta dall'intervallo basso (`0100`) a quello alto (`1100`). Questo "salto" è strutturale
-> ed è la stessa rottura di simmetria visibile in Aiken: è il prezzo da pagare per avere
-> contemporaneamente la proprietà Gray e quella di autocomplementazione.
+### Altro modo di costruire Eccesso 3 Riflesso
 
-**Esempio di codifica:** il numero **28** in XS-3 riflesso:
+Un altro modo per costruire il codice Eccesso 3 Riflesso è partire dal codice Eccesso 3.
+Si prende la parola di codice Eccesso 3 a 4 bit e si applica l'operazione **XOR tra la parola e se stessa shiftata di 1 posizione a destra**.
+
+La tabella seguente mostra la derivazione per tutte le cifre:
+
+| Decimale | XS-3   | XS-3 >> 1 | XS-3 Rifl. (XOR) |
+|:--------:|:------:|:---------:|:------------------:|
+|    0     | `0011` |   `0001`  |       `0010`       |
+|    1     | `0100` |   `0010`  |       `0110`       |
+|    2     | `0101` |   `0010`  |       `0111`       |
+|    3     | `0110` |   `0011`  |       `0101`       |
+|    4     | `0111` |   `0011`  |       `0100`       |
+|    5     | `1000` |   `0100`  |       `1100`       |
+|    6     | `1001` |   `0100`  |       `1101`       |
+|    7     | `1010` |   `0101`  |       `1111`       |
+|    8     | `1011` |   `0101`  |       `1110`       |
+|    9     | `1100` |   `0110`  |       `1010`       |
+
+I risultati coincidono esattamente con la tabella costruita tramite il codice Gray nella sezione precedente ✓. 
+
+
+**Esempio di codifica:** il numero **28** in Eccesso 3 Riflesso:
 - 2 → `0111`, 8 → `1110` → **`0111 1110`**
 
 **Esempio di decodifica:** `0101 1100` → `0101` = 3, `1100` = 5 → **35**.
+
+---
+
+## 3.8 Codice 1 su n
+
+Il codice **1 su n** (o *one-hot*) utilizza **n bit** per codificare **n simboli distinti**, con il vincolo che in ogni parola valida esattamente **1 bit sia a `1`** e tutti gli altri siano a `0`. Non si tratta di un codice pesato: ogni bit corrisponde direttamente a uno e un solo stato o simbolo.
+
+Il vantaggio principale è la **semplicità del decodificatore hardware**: riconoscere quale simbolo è attivo significa semplicemente individuare quale linea è alta, senza alcuna logica combinatoria aggiuntiva. La verifica di errore è altrettanto immediata: qualsiasi parola con zero o più di un bit a `1` è invalida.
+
+| Simbolo | Codice 1-su-4 |
+|:-------:|:-------------:|
+|    0    |    `0001`     |
+|    1    |    `0010`     |
+|    2    |    `0100`     |
+|    3    |    `1000`     |
+
+### Applicazioni tipiche
+
+Il codice one-hot è usato in tutti i contesti dove ogni simbolo corrisponde a **una linea fisica dedicata**: decoder, display a segmenti multipli, tastiere a matrice, e sistemi di selezione canale dove ogni bit abilita direttamente un componente hardware senza necessità di logica intermedia.
+
+**Esempio:** un sistema con 4 canali da selezionare usa 4 bit one-hot. Per attivare il canale 2: `0100`. Una parola come `0101` (due bit a `1`) è immediatamente riconoscibile come errore.
 
 ---
 
@@ -335,7 +371,7 @@ In **big endian** il byte più significativo (MSB, *Most Significant Byte*) vien
 per primo, all'indirizzo di memoria più basso. È la convenzione "naturale" per chi legge da
 sinistra a destra: il numero `0x12345678` si trova in memoria esattamente come lo si scriverebbe
 su carta — `12 34 56 78` agli indirizzi consecutivi. È usata dalle architetture Motorola 68k,
-dai processori di rete (Internet è big endian per convenzione), e da molti formati di file
+nelle reti (Internet è big endian per convenzione), e da molti formati di file
 standard.
 
 In **little endian** è invece il byte meno significativo (LSB, *Least Significant Byte*) a
@@ -343,8 +379,7 @@ occupare l'indirizzo più basso. Lo stesso numero `0x12345678` si troverebbe in 
 `78 56 34 12`. Può sembrare controintuitivo, ma ha un vantaggio pratico: leggendo
 dall'indirizzo base si ottiene subito la parte meno significativa, il che semplifica alcune
 operazioni aritmetiche su numeri di lunghezza variabile. È la convenzione adottata da Intel
-x86/x64, ARM (in modalità predefinita) e dalla grande maggioranza dei processori moderni per
-uso general-purpose.
+x86/x64, ARM (in modalità predefinita) e dalla grande maggioranza dei processori moderni general-purpose.
 
 | Convenzione   | Byte all'indirizzo più basso | Esempio: `0x12345678` in memoria | Usata da                       |
 |:--------------|:----------------------------:|:--------------------------------:|:-------------------------------|
@@ -362,13 +397,135 @@ sistemi industriali e nei PLC che comunicano tra architetture eterogenee.
 
 ---
 
-## 3.10 Riepilogo
+Preferisco scrivere il codice direttamente — è sufficientemente chiaro da non richiedere esecuzione preventiva. Ecco il programma completo:
 
-| Codice          | Bit | Come si costruisce                              | Proprietà chiave                               | Applicazione tipica                     |
-|:----------------|:---:|:------------------------------------------------|:-----------------------------------------------|:----------------------------------------|
-| BCD 8421        | 4   | Binario diretto, solo 0–9 validi                | Pesato standard; packed/unpacked               | Display 7 seg., PLC, calcolatrici       |
-| Aiken 2421      | 4   | Pesato 2-4-2-1, codifica alta per 5–9           | Autocomplementante                             | Didattica, calcolatori storici          |
-| XS-3            | 4   | BCD + 3 in binario                              | Autocomplementante                             | Aritmetica BCD hardware                 |
-| 63210           | 5   | Pesi 6-3-2-1-0, esattamente 2 bit a `1`         | Pesato (1–9) + self-checking                   | Barcode, sistemi industriali            |
-| Gray            | n   | Costruzione riflessiva, XOR tra bit adiacenti   | 1 bit cambia per transizione                   | Encoder rotativi, CNC, robotica         |
-| XS-3 Riflesso   | 4   | Gray del valore (dec+3)                         | 1 bit per transizione     | Sistemi misti display/encoder           |
+***
+
+## 3.10 Programma Python sui codici numerici
+
+Il programma seguente raccoglie in funzioni separate tutte le codifiche viste nel capitolo. Ogni funzione riceve una cifra decimale (0–9) e restituisce la stringa di bit corrispondente; il menu principale permette di esplorare i codici in modo interattivo.
+
+```python
+# ─────────────────────────────────────────────
+#  Codici numerici – Capitolo 3
+#  Ogni funzione accetta una cifra intera 0-9
+#  e restituisce una stringa di bit es. "0101"
+# ─────────────────────────────────────────────
+
+def bcd(d):
+    """BCD 8421: binario diretto su 4 bit."""
+    return format(d, '04b')
+
+def aiken(d):
+    """Aiken 2421: pesi 2-4-2-1, autocomplementante."""
+    tabella = {
+        0: "0000", 1: "0001", 2: "0010", 3: "0011", 4: "0100",
+        5: "1011", 6: "1100", 7: "1101", 8: "1110", 9: "1111"
+    }
+    return tabella[d]
+
+def xs3(d):
+    """Eccesso 3: si aggiunge 3 e si codifica in binario su 4 bit."""
+    return format(d + 3, '04b')
+
+def xs3_riflesso(d):
+    """Eccesso 3 Riflesso: XOR tra XS-3 e XS-3 shiftato di 1 (= Gray del valore d+3)."""
+    valore = d + 3
+    gray = valore ^ (valore >> 1)
+    return format(gray, '04b')
+
+def due_su_cinque(d):
+    """Codice 2-su-5 pesato 63210: esattamente 2 bit a 1."""
+    tabella = {
+        0: "00110", 1: "00011", 2: "00101", 3: "01001", 4: "01010",
+        5: "01100", 6: "10001", 7: "10010", 8: "10100", 9: "11000"
+    }
+    return tabella[d]
+
+def gray(d):
+    """Codice Gray a 4 bit: binario XOR shiftato di 1."""
+    return format(d ^ (d >> 1), '04b')
+
+def one_hot(d):
+    """Codice 1-su-10: bit in posizione d a 1, tutti gli altri a 0."""
+    return format(1 << d, '010b')
+
+
+# ─────────────────────────────────────────────
+#  Stampa tutte le codifiche per una cifra
+# ─────────────────────────────────────────────
+
+def stampa_tutte(d):
+    print(f"\n  Cifra decimale : {d}")
+    print(f"  BCD 8421       : {bcd(d)}")
+    print(f"  Aiken 2421     : {aiken(d)}")
+    print(f"  Eccesso 3      : {xs3(d)}")
+    print(f"  XS-3 Riflesso  : {xs3_riflesso(d)}")
+    print(f"  2-su-5 (63210) : {due_su_cinque(d)}")
+    print(f"  Gray           : {gray(d)}")
+    print(f"  One-hot (1/10) : {one_hot(d)}")
+
+
+# ─────────────────────────────────────────────
+#  Menu principale
+# ─────────────────────────────────────────────
+
+def leggi_cifra():
+    while True:
+        s = input("Inserisci una cifra decimale (0-9): ")
+        if s.isdigit() and 0 <= int(s) <= 9:
+            return int(s)
+        print("⚠ Valore non valido. Inserisci un numero tra 0 e 9.")
+
+CODICI = {
+    "1": ("BCD 8421",       bcd),
+    "2": ("Aiken 2421",     aiken),
+    "3": ("Eccesso 3",      xs3),
+    "4": ("XS-3 Riflesso",  xs3_riflesso),
+    "5": ("2-su-5 (63210)", due_su_cinque),
+    "6": ("Gray",           gray),
+    "7": ("One-hot",        one_hot),
+}
+
+def menu():
+    cifra = leggi_cifra()
+
+    while True:
+        print()
+        print(f"╔══════════════════════════════╗")
+        print(f"║  Cifra corrente: {cifra}           ║")
+        print(f"╠══════════════════════════════╣")
+        print(f"║  0. Tutte le codifiche       ║")
+        for k, (nome, _) in CODICI.items():
+            print(f"║  {k}. {nome:<25}║")
+        print(f"║  8. Cambia cifra             ║")
+        print(f"║  9. Esci                     ║")
+        print(f"╚══════════════════════════════╝")
+
+        scelta = input("  Scelta: ").strip()
+
+        if scelta == "0":
+            stampa_tutte(cifra)
+        elif scelta in CODICI:
+            nome, funzione = CODICI[scelta]
+            print(f"\n  {nome}: {funzione(cifra)}")
+        elif scelta == "8":
+            cifra = leggi_cifra()
+        elif scelta == "9":
+            print("\n  Arrivederci!\n")
+            break
+        else:
+            print("  ⚠ Scelta non valida.")
+
+if __name__ == "__main__":
+    print("\n╔══════════════════════════════╗")
+    print("║   Codici numerici – Cap. 3   ║")
+    print("╚══════════════════════════════╝")
+    menu()
+```
+Alcuni commenti sulle scelte progettuali:
+
+- `xs3_riflesso` usa esattamente la formula $\text{XS-3} \oplus (\text{XS-3} \gg 1)$ appena vista nel 3.7, non una tabella hardcoded;
+- `gray` usa la formula `n ^ (n >> 1)` già citata nel 3.6;
+- `one_hot` usa 10 bit (1 per ogni cifra decimale);
+- Aiken e 2-su-5 usano tabelle esplicite.
